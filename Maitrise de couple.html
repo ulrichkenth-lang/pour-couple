@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La seconde moitié du chemin — Protocole couple</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --black:#0a0908;
+    --panel:#141210;
+    --panel-2:#1c1913;
+    --gold:#c9a24b;
+    --gold-bright:#e3c274;
+    --copper:#b5703c;
+    --cream:#ece4d4;
+    --muted:#9c9284;
+    --line:rgba(201,162,75,0.22);
+    --serif:'Fraunces', serif;
+    --sans:'Inter', sans-serif;
+    --success:rgba(76,175,80,0.15);
+    --danger:rgba(244,67,54,0.12);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--black);
+    color:var(--cream);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  img{max-width:100%; display:block;}
+
+  .wrap{max-width:720px; margin:0 auto; padding:0 24px;}
+
+  .seal{
+    width:46px; height:46px;
+    border:1px solid var(--gold);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .seal::before{
+    content:''; position:absolute; inset:5px;
+    border:1px solid var(--line); border-radius:50%;
+  }
+  .seal svg{width:18px; height:18px;}
+  .seal-divider{
+    display:flex; align-items:center; justify-content:center;
+    gap:14px; margin:56px 0; color:var(--gold);
+  }
+  .seal-divider .line{flex:1; max-width:120px; height:1px; background:var(--line);}
+
+  header{
+    padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:var(--serif);
+    letter-spacing:0.14em; font-size:13px;
+    text-transform:uppercase; color:var(--gold-bright);
+  }
+  .lock-note{
+    font-size:11px; color:var(--muted);
+    letter-spacing:0.06em; text-transform:uppercase;
+  }
+
+  .live-band{
+    background: linear-gradient(90deg, rgba(201,162,75,0.12), rgba(181,112,60,0.12));
+    border-bottom:1px solid var(--line);
+    padding:10px 24px;
+    text-align:center;
+    font-size:12.5px;
+    color:var(--cream);
+    letter-spacing:0.04em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+  .live-dot{
+    width:8px; height:8px;
+    background:#4caf50;
+    border-radius:50%;
+    display:inline-block;
+    position:relative;
+  }
+  .live-dot::after{
+    content:''; position:absolute; inset:-4px;
+    border-radius:50%;
+    background:rgba(76,175,80,0.4);
+    animation:pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot{
+    0%{transform:scale(1); opacity:1;}
+    100%{transform:scale(2.5); opacity:0;}
+  }
+  .live-band strong{
+    color:var(--gold-bright);
+    font-family:var(--serif);
+    font-weight:600;
+  }
+
+  .hero{
+    padding:60px 24px 40px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  .hero .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--gold-bright); margin-bottom:20px;
+  }
+  .hero .eyebrow::before{
+    content:''; width:22px; height:1px; background:var(--gold);
+  }
+  .hero h1{
+    font-family:var(--serif); font-weight:600;
+    font-size:clamp(28px, 6vw, 42px);
+    line-height:1.16; letter-spacing:-0.01em;
+    color:var(--cream); max-width:16ch; margin:0 auto;
+  }
+  .hero-sub{
+    margin-top:18px; font-size:16px;
+    color:var(--muted); max-width:48ch; margin-left:auto; margin-right:auto;
+  }
+  .product-tag{
+    display:inline-block;
+    font-family:var(--sans); font-size:11.5px; font-weight:600;
+    letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--gold-bright); border:1px solid var(--line);
+    padding:6px 14px; border-radius:2px; margin-top:24px;
+  }
+
+  section{padding:54px 0;}
+  .kicker{
+    font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:16px; display:block;
+  }
+  h2{
+    font-family:var(--serif); font-weight:600;
+    font-size:clamp(22px,4vw,28px);
+    line-height:1.28; color:var(--cream); max-width:20ch;
+  }
+  p{color:var(--muted); font-size:16px;}
+  p + p{margin-top:14px;}
+
+  .pull{
+    font-family:var(--serif); font-style:italic;
+    font-size:clamp(19px,3.4vw,23px); line-height:1.5;
+    color:var(--cream);
+    border-left:1px solid var(--gold);
+    padding-left:20px; margin:26px 0;
+  }
+
+  .next-step-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(201,162,75,0.1);
+    border:1px solid var(--line);
+    padding:8px 16px;
+    border-radius:40px;
+    font-size:12px;
+    color:var(--gold-bright);
+    margin-bottom:20px;
+    font-weight:500;
+  }
+
+  .transform-wrap{
+    margin-top:36px;
+    position:relative;
+  }
+  .transform-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    padding:6px 14px;
+    border-radius:2px;
+    margin-bottom:16px;
+  }
+  .transform-badge.before-badge{
+    background:var(--danger);
+    color:#ff8a80;
+    border:1px solid rgba(244,67,54,0.3);
+  }
+  .transform-badge.after-badge{
+    background:rgba(201,162,75,0.15);
+    color:var(--gold-bright);
+    border:1px solid var(--line);
+  }
+  .transform{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+  .transform-col{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:28px 24px;
+    position:relative;
+    overflow:hidden;
+  }
+  .transform-col.before{
+    border-left:3px solid rgba(244,67,54,0.5);
+  }
+  .transform-col.after{
+    background: linear-gradient(180deg, rgba(201,162,75,0.08) 0%, var(--panel) 100%);
+    border:1px solid rgba(201,162,75,0.35);
+    border-left:3px solid var(--gold);
+    box-shadow:0 0 40px rgba(201,162,75,0.06);
+  }
+  .transform-col.after::before{
+    content:''; position:absolute; top:-40px; right:-40px;
+    width:120px; height:120px;
+    background:radial-gradient(circle, rgba(201,162,75,0.12), transparent 70%);
+    pointer-events:none;
+  }
+  .transform-label{
+    font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    margin-bottom:20px; display:block; font-weight:700;
+  }
+  .transform-col.before .transform-label{color:#ff8a80;}
+  .transform-col.after .transform-label{color:var(--gold-bright);}
+  .transform-item{
+    display:flex; align-items:flex-start; gap:12px;
+    font-size:14.5px; padding:11px 0;
+    color:var(--muted); border-bottom:1px solid rgba(255,255,255,0.04);
+  }
+  .transform-item:last-child{border-bottom:none;}
+  .transform-col.after .transform-item{color:var(--cream);}
+  .transform-icon{
+    width:20px; height:20px;
+    flex-shrink:0; margin-top:1px;
+  }
+  .transform-col.before .transform-icon{color:#ff8a80;}
+  .transform-col.after .transform-icon{color:var(--gold);}
+
+  @media (min-width:640px){
+    .transform{grid-template-columns:1fr 1fr; gap:0;}
+    .transform-col.before{border-radius:4px 0 0 4px;}
+    .transform-col.after{border-radius:0 4px 4px 0;}
+  }
+
+  .ticker-section{
+    padding:60px 0;
+    overflow:hidden;
+    position:relative;
+  }
+  .ticker-section::before,
+  .ticker-section::after{
+    content:''; position:absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none;
+  }
+  .ticker-section::before{left:0; background:linear-gradient(90deg, var(--black), transparent);}
+  .ticker-section::after{right:0; background:linear-gradient(270deg, var(--black), transparent);}
+  .ticker-header{
+    text-align:center;
+    margin-bottom:36px;
+  }
+  .ticker-header h2{
+    max-width:none;
+    font-size:clamp(20px,3.5vw,26px);
+  }
+  .ticker-row{
+    display:flex;
+    width:max-content;
+    gap:18px;
+    margin-bottom:18px;
+  }
+  .ticker-row.row-1{animation:scroll-left 45s linear infinite;}
+  .ticker-row.row-2{animation:scroll-right 50s linear infinite;}
+  .ticker-row:hover{animation-play-state:paused;}
+  @keyframes scroll-left{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+  @keyframes scroll-right{
+    0%{transform:translateX(-50%);}
+    100%{transform:translateX(0);}
+  }
+  .review-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:24px;
+    min-width:340px;
+    max-width:340px;
+    flex-shrink:0;
+    transition:transform 0.3s ease, border-color 0.3s ease;
+  }
+  .review-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(201,162,75,0.5);
+  }
+  .review-stars{
+    color:var(--gold);
+    font-size:14px;
+    letter-spacing:2px;
+    margin-bottom:12px;
+  }
+  .review-text{
+    font-size:14px;
+    line-height:1.65;
+    color:var(--cream);
+    font-style:italic;
+    margin-bottom:16px;
+  }
+  .review-author{
+    display:flex; align-items:center; gap:10px;
+  }
+  .review-avatar{
+    width:32px; height:32px;
+    border-radius:50%;
+    background:linear-gradient(135deg, var(--panel-2), var(--panel));
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif);
+    font-size:12px; color:var(--gold);
+    font-weight:600;
+  }
+  .review-meta{
+    font-size:12px; color:var(--muted);
+    line-height:1.4;
+  }
+  .review-meta strong{
+    color:var(--cream); font-weight:600;
+    display:block; font-size:12.5px;
+  }
+  .verified-badge{
+    display:inline-flex; align-items:center; gap:4px;
+    font-size:10.5px; color:#4caf50;
+    margin-top:2px;
+    font-weight:500;
+  }
+
+  .protocol-list{margin-top:32px; border-top:1px solid var(--line);}
+  .protocol-item{
+    display:flex; gap:20px;
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .protocol-num{
+    font-family:var(--serif); font-size:13px;
+    color:var(--gold); letter-spacing:0.04em;
+    padding-top:2px; min-width:34px;
+  }
+  .protocol-item h3{
+    font-family:var(--serif); font-weight:600;
+    font-size:17px; color:var(--cream); margin-bottom:6px;
+  }
+  .protocol-item p{font-size:14.5px; margin:0;}
+
+  .objection{
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .objection h3{
+    font-family:var(--sans); font-weight:600;
+    font-size:15.5px; color:var(--cream); margin-bottom:8px;
+  }
+  .objection p{font-size:14.5px;}
+
+  .cta-block{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:36px 28px;
+    text-align:center;
+    margin:40px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-block::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity:0.6;
+  }
+  .price-row{
+    display:flex; align-items:baseline; justify-content:center; gap:10px;
+    margin-bottom:6px;
+  }
+  .price{
+    font-family:var(--serif); font-size:36px;
+    color:var(--gold-bright); font-weight:600;
+  }
+  .price-note{font-size:12.5px; color:var(--muted);}
+
+  .btn{
+    display:block; width:100%;
+    background:linear-gradient(135deg, var(--gold-bright), var(--copper));
+    color:var(--black); text-align:center;
+    padding:18px 20px;
+    font-family:var(--sans); font-weight:700;
+    font-size:15px; letter-spacing:0.02em;
+    text-decoration:none; border-radius:3px;
+    margin-top:20px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
+    border:none; cursor:pointer;
+    position:relative; z-index:1;
+  }
+  .btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(201,162,75,0.3);
+  }
+  .btn-sub{
+    font-size:11.5px; color:var(--muted);
+    margin-top:14px; letter-spacing:0.02em;
+  }
+
+  .trust-strip{
+    display:flex; flex-wrap:wrap; gap:10px 24px;
+    padding:24px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    font-size:12px; color:var(--muted);
+    letter-spacing:0.02em;
+  }
+  .trust-strip div{display:flex; align-items:center; gap:8px;}
+  .trust-strip div::before{content:'—'; color:var(--gold);}
+
+  footer{
+    padding:40px 24px 100px;
+    text-align:center;
+  }
+  footer p{font-size:11.5px; color:#5c574c; max-width:44ch; margin:0 auto;}
+
+  .sticky-cta{
+    position:fixed; left:0; right:0; bottom:0;
+    background:rgba(10,9,8,0.98);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    padding:12px 16px;
+    display:flex; align-items:center; gap:14px;
+    z-index:50;
+  }
+  .sticky-cta .price{font-size:18px;}
+  .sticky-cta .btn{margin:0; flex:1; padding:13px; font-size:14px;}
+
+  .social-counter{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(201,162,75,0.08);
+    border:1px solid var(--line);
+    padding:8px 16px;
+    border-radius:40px;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:18px;
+  }
+  .social-counter strong{
+    color:var(--gold-bright);
+    font-family:var(--serif);
+  }
+
+  @media (min-width:760px){
+    .hero{padding:80px 24px 50px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand">Confidentiel</span>
+  <span class="lock-note">Accès individuel · Format numérique</span>
+</header>
+
+<!-- LIVE COUNTER BAND -->
+<div class="live-band">
+  <span class="live-dot"></span>
+  <span>En direct : <strong id="header-counter">1 203</strong> protocoles couple consultés ce mois-ci</span>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <span class="eyebrow">Suite du protocole — volet couple</span>
+  <h1>Tu as maîtrisé la première moitié. Il te reste la seconde.</h1>
+  <p class="hero-sub">La suite logique de ton protocole personnel. Pour transposer ta puissance dans la dynamique à deux — sans perdre le contrôle.</p>
+  <span class="product-tag">Maîtrise de Couple — Édition numérique</span>
+</section>
+
+<div class="wrap">
+
+  <!-- ============ AGITATION ============ -->
+  <section style="padding-top:44px;">
+    <div class="next-step-badge">← Tu viens d'acquérir le protocole individuel</div>
+    <span class="kicker">Ce que tu ressens peut-être déjà</span>
+    <h2>Tu maîtrises ton corps. Mais quand elle entre en jeu, quelque chose coince.</h2>
+    <p style="margin-top:20px;">Tu as fait le travail. Tu connais ton érection, ton endurance, ton contrôle. Sur le papier, tu es armé. Pourtant, un soir, alors qu'elle est là, tu sens un manque. Un silence. Une distance que ni tes techniques ni ta maîtrise ne comblent.</p>
+    <p>Ce n'est pas un échec de ta part. C'est simplement que l'intimité à deux demande une dimension supplémentaire — celle du pilote, pas seulement du performeur.</p>
+
+    <p class="pull">« Un homme qui maîtrise sa sexualité seul mais échoue à la transposer dans son couple n'a accompli que la moitié du chemin. Et c'est souvent cette moitié qui fait la différence. »</p>
+
+    <p>Ce guide n'est pas une reprise des bases. Tu les as déjà. C'est le volet couple — la suite naturelle et indispensable de ta transformation.</p>
+
+    <!-- AVANT / APRÈS -->
+    <div class="transform-wrap">
+      <div class="transform">
+        <div class="transform-col before">
+          <span class="transform-badge before-badge">Seul</span>
+          <span class="transform-label">Ce que tu maîtrises déjà</span>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Ton corps, ton rythme, ton contrôle — en solo
+          </div>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Une performance qui ne nourrit que toi
+          </div>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            La routine qui s'installe sans que tu nommes pourquoi
+          </div>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            Une déception silencieuse que tu devines mais ne comprends pas
+          </div>
+        </div>
+        <div class="transform-col after">
+          <span class="transform-badge after-badge">À deux</span>
+          <span class="transform-label">Ce que ce protocole ajoute</span>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Lire son désir sans qu'elle ait besoin de le formuler
+          </div>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Piloter l'intimité avec assurance — sans écraser
+          </div>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Transformer ta maîtrise en cadeau qu'elle ressent immédiatement
+          </div>
+          <div class="transform-item">
+            <svg class="transform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Devenir l'homme rare qui pense "nous" au lieu de "moi"
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="seal-divider">
+    <div class="line"></div>
+    <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="#c9a24b" stroke-width="1"><circle cx="12" cy="12" r="8"/><path d="M12 7v10M7 12h10" stroke-width="0.7"/></svg></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- ============ TICKER AVIS ============ -->
+  <section class="ticker-section">
+    <div class="ticker-header">
+      <span class="kicker" style="text-align:center; display:block;">Témoignages anonymisés</span>
+      <h2 style="max-width:none; text-align:center;">Ceux qui ont complété leur protocole.</h2>
+    </div>
+
+    <div class="ticker-row row-1">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"J'avais déjà le premier guide. Celui-ci est la pièce manquante. Ma compagne a remarqué la différence en moins d'une semaine. Je ne savais pas que je manquais ça."</p>
+        <div class="review-author">
+          <div class="review-avatar">JD</div>
+          <div class="review-meta"><strong>Jean D.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Le chapitre sur la déception silencieuse m'a ouvert les yeux. Je comprenais enfin pourquoi elle se taisait. Depuis, notre communication a changé de nature."</p>
+        <div class="review-author">
+          <div class="review-avatar">ML</div>
+          <div class="review-meta"><strong>Marc L.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"10€ pour sauver des années de routine. Le concept du pilote m'a fait passer d'une logique de performance à une logique de création à deux. C'est radical."</p>
+        <div class="review-author">
+          <div class="review-avatar">AT</div>
+          <div class="review-meta"><strong>Antoine T.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Je pensais que maîtriser mon corps suffisait. Ce guide m'a montré que l'intimité de couple est un art supérieur. Les techniques de synchronisation sont bluffantes."</p>
+        <div class="review-author">
+          <div class="review-avatar">RB</div>
+          <div class="review-meta"><strong>Romain B.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Direct, sans langue de bois. La partie sur la communication silencieuse m'a fait mal au début, puis tout a basculé. Merci pour cette suite."</p>
+        <div class="review-author">
+          <div class="review-avatar">SK</div>
+          <div class="review-meta"><strong>Sam K.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <!-- Duplicate loop -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"J'avais déjà le premier guide. Celui-ci est la pièce manquante. Ma compagne a remarqué la différence en moins d'une semaine. Je ne savais pas que je manquais ça."</p>
+        <div class="review-author">
+          <div class="review-avatar">JD</div>
+          <div class="review-meta"><strong>Jean D.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Le chapitre sur la déception silencieuse m'a ouvert les yeux. Je comprenais enfin pourquoi elle se taisait. Depuis, notre communication a changé de nature."</p>
+        <div class="review-author">
+          <div class="review-avatar">ML</div>
+          <div class="review-meta"><strong>Marc L.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"10€ pour sauver des années de routine. Le concept du pilote m'a fait passer d'une logique de performance à une logique de création à deux. C'est radical."</p>
+        <div class="review-author">
+          <div class="review-avatar">AT</div>
+          <div class="review-meta"><strong>Antoine T.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Je pensais que maîtriser mon corps suffisait. Ce guide m'a montré que l'intimité de couple est un art supérieur. Les techniques de synchronisation sont bluffantes."</p>
+        <div class="review-author">
+          <div class="review-avatar">RB</div>
+          <div class="review-meta"><strong>Romain B.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Direct, sans langue de bois. La partie sur la communication silencieuse m'a fait mal au début, puis tout a basculé. Merci pour cette suite."</p>
+        <div class="review-author">
+          <div class="review-avatar">SK</div>
+          <div class="review-meta"><strong>Sam K.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticker-row row-2">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Lu en une soirée. Le lendemain, j'ai appliqué la technique des trois questions silencieuses. Pour la première fois, j'ai senti qu'elle était vraiment avec moi."</p>
+        <div class="review-author">
+          <div class="review-avatar">PF</div>
+          <div class="review-meta"><strong>Paul F.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"La discrétion du PDF est essentielle. Aucun colis, aucune question. Le contenu est dense, sans remplissage. Exactement la suite que j'attendais."</p>
+        <div class="review-author">
+          <div class="review-avatar">NC</div>
+          <div class="review-meta"><strong>Nicolas C.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Le chapitre sur le pilotage physique m'a fait comprendre la différence entre guider et imposer. Notre relation intime a gagné en profondeur instantanément."</p>
+        <div class="review-author">
+          <div class="review-avatar">DV</div>
+          <div class="review-meta"><strong>Damien V.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Bonne surprise. Je m'attendais à un simple copié-collé du premier. C'est tout l'inverse : une vraie montée en puissance. Parfait pour aller plus loin à deux."</p>
+        <div class="review-author">
+          <div class="review-avatar">LM</div>
+          <div class="review-meta"><strong>Lucas M.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"J'ai offert ça à mon ami après le premier guide. Il m'a appelé deux semaines après. Ce volet couple est le complément naturel et indispensable."</p>
+        <div class="review-author">
+          <div class="review-avatar">TH</div>
+          <div class="review-meta"><strong>Thomas H.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <!-- Duplicate loop -->
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Lu en une soirée. Le lendemain, j'ai appliqué la technique des trois questions silencieuses. Pour la première fois, j'ai senti qu'elle était vraiment avec moi."</p>
+        <div class="review-author">
+          <div class="review-avatar">PF</div>
+          <div class="review-meta"><strong>Paul F.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"La discrétion du PDF est essentielle. Aucun colis, aucune question. Le contenu est dense, sans remplissage. Exactement la suite que j'attendais."</p>
+        <div class="review-author">
+          <div class="review-avatar">NC</div>
+          <div class="review-meta"><strong>Nicolas C.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Le chapitre sur le pilotage physique m'a fait comprendre la différence entre guider et imposer. Notre relation intime a gagné en profondeur instantanément."</p>
+        <div class="review-author">
+          <div class="review-avatar">DV</div>
+          <div class="review-meta"><strong>Damien V.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Bonne surprise. Je m'attendais à un simple copié-collé du premier. C'est tout l'inverse : une vraie montée en puissance. Parfait pour aller plus loin à deux."</p>
+        <div class="review-author">
+          <div class="review-avatar">LM</div>
+          <div class="review-meta"><strong>Lucas M.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"J'ai offert ça à mon ami après le premier guide. Il m'a appelé deux semaines après. Ce volet couple est le complément naturel et indispensable."</p>
+        <div class="review-author">
+          <div class="review-avatar">TH</div>
+          <div class="review-meta"><strong>Thomas H.</strong><span class="verified-badge">✓ Achat vérifié</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OBJECTIONS ============ -->
+  <section>
+    <span class="kicker">Avant de continuer</span>
+    <h2>Ce que tu dois savoir.</h2>
+
+    <div class="objection">
+      <h3>J'ai déjà le premier guide. Pourquoi celui-ci ?</h3>
+      <p>Le premier protocole t'a donné les fondamentaux personnels. Celui-ci t'apprend à les transposer dans la dynamique à deux. C'est la suite logique — pas une répétition. On ne t'apprend pas à conduire une voiture en te montrant seulement le moteur.</p>
+    </div>
+    <div class="objection">
+      <h3>Est-ce que ça s'adresse à mon cas ?</h3>
+      <p>Que tu sois en couple depuis six mois ou vingt ans, que tout aille "bien" ou que tu sentes un manque — ce protocole est fait pour tout homme qui veut passer d'une logique de performance à une logique de création à deux.</p>
+    </div>
+    <div class="objection">
+      <h3>10€ de plus, vraiment ?</h3>
+      <p>C'est le prix d'un verre en terrasse. C'est aussi la différence entre maîtriser ton corps seul, et enfin devenir l'homme qui pilote l'intimité de son couple avec conscience. Un investissement ridiculement faible pour une transformation aussi profonde.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0;">
+    <p style="font-family:var(--serif); font-style:italic; font-size:16.5px; color:var(--cream); text-align:center; max-width:36ch; margin:0 auto;">Ton couple ne demande pas la perfection. Il demande un homme qui prend le volant.</p>
+  </section>
+
+  <!-- ============ PROTOCOL ============ -->
+  <section style="padding-top:0;">
+    <span class="kicker">Ce que contient le protocole</span>
+    <h2>Un cheminement en quatre mouvements, pour piloter l'intimité à deux.</h2>
+
+    <div class="protocol-list">
+      <div class="protocol-item">
+        <span class="protocol-num">I</span>
+        <div>
+          <h3>La prise de conscience</h3>
+          <p>Pourquoi ta maîtrise personnelle ne suffit plus. Comment lire son désir sans qu'elle ait besoin de parler. Et pourquoi elle se tait parfois — même quand tout semble aller bien.</p>
+        </div>
+      </div>
+      <div class="protocol-item">
+        <span class="protocol-num">II</span>
+        <div>
+          <h3>La communication silencieuse</h3>
+          <p>Parler de sexe sans la faire fuir. Lire le langage secret de son corps. Et découvrir ce qu'elle n'ose pas te montrer — mais désire profondément.</p>
+        </div>
+      </div>
+      <div class="protocol-item">
+        <span class="protocol-num">III</span>
+        <div>
+          <h3>Piloter l'intimité</h3>
+          <p>Devenir son guide sans l'écraser. Les techniques qui transforment le couple. Et rallumer la flamme quand la routine menace de tout endormir.</p>
+        </div>
+      </div>
+      <div class="protocol-item">
+        <span class="protocol-num">IV</span>
+        <div>
+          <h3>Préserver et grandir</h3>
+          <p>Les erreurs qui détruisent l'intimité de couple — et comment les éviter. Construire une sexualité de couple consciente, durable et vivante.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:20px; font-size:13.5px;">11 chapitres. Des exercices concrets à chaque étape. Aucun jargon clinique — seulement ce qui transforme un homme solitaire en pilote de couple.</p>
+  </section>
+
+  <!-- ============ CTA 1 ============ -->
+  <div class="cta-block">
+    <div class="social-counter">
+      <span class="live-dot" style="width:6px;height:6px;"></span>
+      <strong id="cta-counter-1">1 203</strong> protocoles couple consultés ce mois-ci
+    </div>
+    <div class="price-row">
+      <span class="price">10,00&nbsp;€</span>
+    </div>
+    <p class="price-note">Accès immédiat après paiement · Format numérique (PDF)</p>
+    <a href="https://aura-masculine-store.mymaketou.shop/products/maitrise-de-couple-le-volet-couple/checkout" class="btn" onclick="trackCheckout()">Compléter mon protocole maintenant</a>
+    <p class="btn-sub">Paiement sécurisé · Aucune mention explicite associée à la commande</p>
+  </div>
+
+  <div class="seal-divider">
+    <div class="line"></div>
+    <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="#c9a24b" stroke-width="1"><circle cx="12" cy="12" r="8"/><path d="M12 7v10M7 12h10" stroke-width="0.7"/></svg></div>
+    <div class="line"></div>
+  </div>
+
+  <!-- ============ VALEUR ============ -->
+  <section style="padding-top:0;">
+    <span class="kicker">Une question de perspective</span>
+    <h2>10,00&nbsp;€ — pour ne pas rester à mi-chemin.</h2>
+    <p style="margin-top:18px;">Tu as déjà investi dans la première moitié. Tu sais ce que ça vaut. Cette seconde moitié coûte moins cher qu'un cocktail — et elle transforme tout ce que tu as appris seul en expérience partagée. C'est le multiplicateur de ton investissement initial.</p>
+  </section>
+
+  <!-- ============ CTA 2 ============ -->
+  <div class="cta-block">
+    <div class="social-counter">
+      <span class="live-dot" style="width:6px;height:6px;"></span>
+      <strong id="cta-counter-2">1 203</strong> protocoles couple consultés ce mois-ci
+    </div>
+    <div class="price-row">
+      <span class="price">10,00&nbsp;€</span>
+    </div>
+    <p class="price-note">Un accès. Aucun abonnement. Aucune relance.</p>
+    <a href="https://aura-masculine-store.mymaketou.shop/products/maitrise-de-couple-le-volet-couple/checkout" class="btn" onclick="trackCheckout()">Je prends le volant</a>
+    <p class="btn-sub">Tu restes le seul à savoir que tu as ouvert cette page.</p>
+  </div>
+
+  <div class="trust-strip">
+    <div>Livraison numérique instantanée</div>
+    <div>Lecture privée, à ton rythme</div>
+    <div>Aucune mention explicite sur la commande</div>
+  </div>
+
+  <!-- ============ CTA FINALE ============ -->
+  <section style="text-align:center;">
+    <span class="kicker" style="justify-content:center;">Dernière chose</span>
+    <h2 style="max-width:none;">Tu as fait la moitié du chemin seul. L'autre moitié, c'est avec elle — et elle commence maintenant.</h2>
+    <a href="https://aura-masculine-store.mymaketou.shop/products/maitrise-de-couple-le-volet-couple/checkout" class="btn" style="margin-top:28px;" onclick="trackCheckout()">Accéder au protocole couple — 10,00&nbsp;€</a>
+  </section>
+
+</div>
+
+<footer>
+  <p>Ce contenu s'adresse à un public adulte et propose une approche informative et introspective. Il ne remplace pas un avis médical ou psychologique professionnel.</p>
+</footer>
+
+<!-- ============ CTA collante mobile ============ -->
+<div class="sticky-cta">
+  <span class="price">10,00&nbsp;€</span>
+  <a href="https://aura-masculine-store.mymaketou.shop/products/maitrise-de-couple-le-volet-couple/checkout" class="btn" onclick="trackCheckout()">Compléter maintenant</a>
+</div>
+
+<!-- ============ META PIXEL ============ -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1371210287902619');
+  fbq('track', 'PageView');
+
+  function trackCheckout(){
+    fbq('track', 'InitiateCheckout', {
+      content_name: 'Maîtrise de Couple',
+      content_ids: ['P3-T'],
+      value: 10.00,
+      currency: 'EUR'
+    });
+  }
+
+  /* ---------- LIVE COUNTER ---------- */
+  (function(){
+    let base = 1203;
+    const els = [
+      document.getElementById('header-counter'),
+      document.getElementById('cta-counter-1'),
+      document.getElementById('cta-counter-2')
+    ].filter(Boolean);
+
+    function format(n){
+      return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    }
+
+    function update(){
+      if(Math.random() > 0.7){
+        base += 1;
+        els.forEach(el => el.textContent = format(base));
+      }
+    }
+    setInterval(update, 20000);
+  })();
+</script>
+
+</body>
+</html>
